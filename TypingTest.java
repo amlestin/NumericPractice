@@ -1,12 +1,9 @@
 import java.util.Scanner;
 import java.util.Random;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.InputMismatchException;
-
 
 public class TypingTest
 {
+   final static int MAX_ERRORS = 4;
    public static void main(String[] args)
    {
       Scanner keyboard = new Scanner(System.in);
@@ -25,49 +22,41 @@ public class TypingTest
       }
       
       int score = 0;
-      int fail = 0;
-      boolean Alive = true;
-      
+      int errors = 0;
+      boolean alive = true;
       
       Random generator = new Random();
-      
       int[] row = new int[10];
-         
-      while (Alive)
+      while (alive)
       {
          int answer = generator.nextInt(10);
          System.out.println("The number is: " + answer);
          
-         
           int response = keyboard.nextInt();
           keyboard.nextLine();
-        
          
          if (response == answer)
          {
             score++;
             row[answer]++;
          }
-         
          else
          {
-            fail++;
+            errors++;
             row[answer]--;
          }
          
-         Alive = (fail < 4) ? true : false;
+         alive = (errors < MAX_ERRORS) ? true : false;
       }
          
-        
-   
-         
-   
-      System.out.println("Your score was: " + score);
-      
+      System.out.println("Your correctly entered: " + score + " numbers!");
       for(int i = 0; i < row.length; i++)
       {
+         // use float and percentage instead
          System.out.println("Your accuracy for the number " + i + ": " + row[i]);
       }
+
+      keyboard.close();
    }
 
 
