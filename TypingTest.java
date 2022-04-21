@@ -18,7 +18,7 @@ public class TypingTest
       {
          System.out.println("Are you ready? Enter \"Y\" to continue.");
          String input = keyboard.nextLine();
-         wait = (input.equals("y") || input.equals("Y")) ? false : true;
+         wait = input.equalsIgnoreCase("y") ? false : true;
       }
       
       int score = 0;
