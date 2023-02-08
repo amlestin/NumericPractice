@@ -1,3 +1,5 @@
+[![Java CI with Maven](https://github.com/amlestin/NumericPractice/actions/workflows/maven.yml/badge.svg)](https://github.com/amlestin/NumericPractice/actions/workflows/maven.yml)
+
 # NumericPractice
 Small Java program to practice using the numeric row on keyboards
 
