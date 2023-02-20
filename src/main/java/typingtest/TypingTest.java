@@ -4,38 +4,30 @@ import java.util.Scanner;
 import java.util.Random;
 public class TypingTest
 {
-   final static int MAX_ERRORS = 4;
 
       public static void main(String[] args)
    {
       Scanner keyboard = new Scanner(System.in);
-      GameManager gm = new GameManager(MAX_ERRORS);
-      gm.print_instructions();
-      GameManager.get_start_signal(keyboard);
-
-
       Random generator = new Random();
-      while (gm.alive)
+
+      int max_errors = 4;
+
+      System.out.println("What is your maximum number of errors? ");
+      int user_max_errors = GameManager.getUserInput(keyboard);
+      // TODO: Error check response
+      max_errors = user_max_errors;
+
+      GameManager gm = new GameManager(max_errors);
+
+      gm.printInstructions();
+      GameManager.getStartSignal(keyboard);
+
+      while (gm.isAlive())
       {
-         int answer = generator.nextInt(10);
-         System.out.println("The number is: " + answer);
-
-         int response = GameManager.get_user_input(keyboard);
-         if (response == answer)
-         {
-            gm.score++;
-            gm.row[answer]++;
-         }
-         else
-         {
-            gm.errors++;
-            gm.row[answer]--;
-         }
-
-         gm.alive = gm.errors < gm.MAX_ERRORS;
+         gm.testKey(keyboard, generator);
       }
 
-      gm.print_results();
+      gm.printResults();
       keyboard.close();
    }
 }
