@@ -82,24 +82,28 @@ public class GameManager {
         this.alive = this.errors < this.MAX_ERRORS;
     }
 
-    public void runGame(GameManager gm) {
+    public void runGame() {
         Scanner keyboard = new Scanner(System.in);
         Random generator = new Random();
 
         promptMaxErrors(keyboard);
 
-        gm.printInstructions();
+        this.printInstructions();
         GameManager.getStartSignal(keyboard);
 
-        while (gm.isAlive()) {
-            gm.testKey(keyboard, generator);
+        while (this.isAlive()) {
+            this.testKey(keyboard, generator);
         }
 
-        gm.printResults();
+        this.printResults();
         keyboard.close();
     }
 
-    public void promptMaxErrors(Scanner keyboard) {
+    public void runTraining() {
+    }
+
+
+        public void promptMaxErrors(Scanner keyboard) {
         int max_errors;
         System.out.println("What is your maximum number of errors? ");
         int user_max_errors = GameManager.getUserInput(keyboard);

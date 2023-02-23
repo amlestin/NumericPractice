@@ -5,6 +5,6 @@ public class TypingTest
       public static void main(String[] args)
    {
       GameManager gm = new GameManager();
-      gm.runGame(gm);
+      gm.runGame();
    }
 }
