@@ -99,6 +99,7 @@ public class GameManager {
         keyboard.close();
     }
 
+    // TODO: Add training mode
     public void runTraining() {
     }
 
