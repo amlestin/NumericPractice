@@ -1,5 +1,6 @@
 package src.main.java.typingtest;
 
+import java.util.InputMismatchException;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -9,18 +10,25 @@ public class GameManager {
     private int errors;
     private boolean alive;
     private final int[] row;
-
+    boolean exit_requested;
     private int MAX_ERRORS;
 
     public GameManager() {
-        this.alive = true;
-        this.row = new int[10];
+        alive = true;
+        row = new int[10];
     }
 
-    public void printInstructions() {
+    public void printGameInstructions() {
         System.out.println("This game will allow you to demonstrate and develop your number typing skills! \n");
         System.out.println("A random number (0-9) will appear, and you will have to enter it in a specified amount of time. \n");
-        System.out.println("If you fail to enter the correct number " + this.MAX_ERRORS + " times in a row, you lose. Try to get the highest score!");
+        System.out.println("If you fail to enter the correct number " + MAX_ERRORS + " times in a row, you lose. Try to get the highest score!");
+        System.out.println("======================================================================================================");
+    }
+
+    public void printTrainingInstructions() {
+        System.out.println("This training will allow you to develop your number typing skills! \n");
+        System.out.println("A random number (0-9) will appear, and you will have to type it\n");
+        System.out.println("If you type the letter 'q' or 'Q', the training will end. Try your best!");
         System.out.println("======================================================================================================");
     }
 
@@ -33,53 +41,64 @@ public class GameManager {
         }
     }
 
-    public static int getUserInput(Scanner keyboard) {
+    public static int getUserInput(Scanner keyboard) throws InputMismatchException {
         int response = keyboard.nextInt();
         keyboard.nextLine();
         return response;
     }
 
     public void printResults() {
-        System.out.println("Your correctly entered: " + this.score + " numbers!");
-        for (int i = 0; i < this.row.length; i++) {
+        System.out.println("Your correctly entered: " + score + " numbers!");
+        for (int i = 0; i < row.length; i++) {
             // use float and percentage instead
-            System.out.println("Your accuracy for the number " + i + ": " + this.row[i]);
+            System.out.println("Your accuracy for the number " + i + ": " + row[i]);
         }
     }
 
     public void incrementScore() {
-        this.score++;
+        score++;
     }
 
     public void incrementErrors() {
-        this.errors++;
+        errors++;
     }
 
     public void updateKey(boolean correct, int answer) {
         if (correct) {
-            this.row[answer]++;
+            row[answer]++;
         } else {
-            this.row[answer]--;
+            row[answer]--;
         }
     }
 
     public boolean isAlive() {
-        return this.alive;
+        return alive;
     }
 
     public void testKey(Scanner keyboard, Random generator) {
         int answer = generator.nextInt(10);
+        int response;
+
         System.out.println("The number is: " + answer);
-        int response = GameManager.getUserInput(keyboard);
-        if (response == answer) {
-            this.incrementScore();
-            this.updateKey(true, answer);
-        } else {
-            this.incrementErrors();
-            this.updateKey(false, answer);
+
+        try {
+            response = GameManager.getUserInput(keyboard);
+        } catch (InputMismatchException e) {
+            exit_requested = true;
+            return;
         }
 
-        this.alive = this.errors < this.MAX_ERRORS;
+        if (response == answer) {
+            incrementScore();
+            updateKey(true, answer);
+        } else {
+            incrementErrors();
+            updateKey(false, answer);
+        }
+    }
+
+    public void setAlive() {
+        alive = errors < MAX_ERRORS;
     }
 
     public void runGame() {
@@ -88,30 +107,44 @@ public class GameManager {
 
         promptMaxErrors(keyboard);
 
-        this.printInstructions();
+        printGameInstructions();
         GameManager.getStartSignal(keyboard);
 
-        while (this.isAlive()) {
-            this.testKey(keyboard, generator);
+        while (isAlive()) {
+            testKey(keyboard, generator);
+            setAlive();
         }
 
-        this.printResults();
+        printResults();
         keyboard.close();
     }
 
     // TODO: Add training mode
     public void runTraining() {
+        Scanner keyboard = new Scanner(System.in);
+        Random generator = new Random();
+
+        // explain training mode
+        printTrainingInstructions();
+        // run game with no max_errors; end game after 'q' or 'Q' is typed
+        MAX_ERRORS = 0;
+        GameManager.getStartSignal(keyboard);
+        while (!exit_requested) {
+            testKey(keyboard, generator);
+        }
+        printResults();
+        keyboard.close();
     }
 
 
         public void promptMaxErrors(Scanner keyboard) {
-        int max_errors;
         System.out.println("What is your maximum number of errors? ");
         int user_max_errors = GameManager.getUserInput(keyboard);
-        if (user_max_errors <= 0)
-            max_errors = DEFAULT_MAX_ERRORS;
-        else
-            max_errors = user_max_errors;
-        this.MAX_ERRORS = max_errors;
+        if (user_max_errors <= 0) {
+            MAX_ERRORS = DEFAULT_MAX_ERRORS;
+            // TODO: explain default max errors set
+        } else {
+            MAX_ERRORS = user_max_errors;
+        }
     }
 }
