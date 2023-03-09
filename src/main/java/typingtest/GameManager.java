@@ -147,4 +147,26 @@ public class GameManager {
             MAX_ERRORS = user_max_errors;
         }
     }
-}
+
+    public void askGameTypeAndRun() {
+        // TODO: use class keyboard
+        Scanner keyboard = new Scanner(System.in);
+
+        System.out.println("Enter 'g' for game or 't' to train your typing skills: ");
+
+//        keyboard.useDelimiter("");
+//        String userChoice = keyboard.next();
+
+        String userChoice = keyboard.nextLine();
+
+
+        if (userChoice.equalsIgnoreCase("g'")) {
+            runGame();
+        } else if (userChoice.equalsIgnoreCase("t")) {
+            runTraining();
+        } else {
+            // run game by default? TODO
+            runGame();
+        }
+        }
+    }

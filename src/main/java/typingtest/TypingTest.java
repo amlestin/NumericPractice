@@ -6,6 +6,6 @@ public class TypingTest
    {
       GameManager gm = new GameManager();
       // TODO: ask if this will be training or a game/test
-      gm.runGame();
+       gm.askGameTypeAndRun();
    }
 }
