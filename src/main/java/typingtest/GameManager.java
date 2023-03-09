@@ -154,12 +154,7 @@ public class GameManager {
 
         System.out.println("Enter 'g' for game or 't' to train your typing skills: ");
 
-//        keyboard.useDelimiter("");
-//        String userChoice = keyboard.next();
-
         String userChoice = keyboard.nextLine();
-
-
         if (userChoice.equalsIgnoreCase("g'")) {
             runGame();
         } else if (userChoice.equalsIgnoreCase("t")) {
